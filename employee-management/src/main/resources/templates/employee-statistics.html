@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thống kê nhân viên</title>
+</head>
+<body>
+<h1>Thống kê nhân viên</h1>
+
+<p>Tổng số nhân viên: <strong th:text="${total}"></strong></p>
+
+<h2>Số lượng theo phòng ban</h2>
+<table border="1" cellpadding="8">
+    <tr><th>Phòng ban</th><th>Số lượng</th></tr>
+    <tr th:each="row : ${byDepartment}">
+        <td th:text="${row.department}"></td>
+        <td th:text="${row.total}"></td>
+    </tr>
+</table>
+</body>
+</html>

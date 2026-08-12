@@ -58,4 +58,11 @@ public class EmployeeWebController {
         model.addAttribute("employees", result);
         return "employee-search";
     }
+
+    @GetMapping("/statistics")
+    public String statistics(Model model) {
+        model.addAttribute("byDepartment", employeeRepository.countEmployeesByDepartment());
+        model.addAttribute("total", employeeRepository.count());
+        return "employee-statistics";
+    }
 }
