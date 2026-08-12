@@ -6,12 +6,16 @@ import com.example.employeemanagement.exception.EmployeeNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/employees-db")
 public class EmployeeCrudController {
+
+    private static final Logger log = LoggerFactory.getLogger(EmployeeCrudController.class);
 
     private final EmployeeRepository employeeRepository;
 
@@ -36,7 +40,9 @@ public class EmployeeCrudController {
     // POST thêm mới
     @PostMapping
     public EmployeeEntity create(@Valid @RequestBody EmployeeEntity employee) {
-        return employeeRepository.save(employee);
+        EmployeeEntity saved = employeeRepository.save(employee);
+        log.info("Đã thêm nhân viên mới: id={}, name={}", saved.getId(), saved.getName());
+        return saved;
     }
 
     // PUT cập nhật
@@ -46,7 +52,9 @@ public class EmployeeCrudController {
             existing.setName(updated.getName());
             existing.setEmail(updated.getEmail());
             existing.setDepartment(updated.getDepartment());
-            return ResponseEntity.ok(employeeRepository.save(existing));
+            EmployeeEntity saved = employeeRepository.save(existing);
+            log.info("Đã cập nhật nhân viên: id={}. name={}", saved.getId(), saved.getName());
+            return ResponseEntity.ok(saved);
         }).orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
@@ -57,6 +65,7 @@ public class EmployeeCrudController {
             throw new EmployeeNotFoundException(id);
         }
         employeeRepository.deleteById(id);
+        log.info("Đã xóa nhân viên: id={}", id);
         return ResponseEntity.noContent().build();
     }
 
